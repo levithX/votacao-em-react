@@ -4,6 +4,7 @@ import CriarVotacoes from './componente/CriarVotacoes'
 // import { list } from 'postcss'
 
 function App() {
+const [numeroVotos, setNumeroVotos] = useState(5)
 const [ganhador, setGanhador] = useState(null)
 const [inputNewVote, setInputNewVote] = useState('') 
 const [falhaResultado,setFalhaResultado ] = useState(false)
@@ -14,9 +15,13 @@ const [listaDeVotacao, setListaDeVotacao] = useState([
     {id: 4, title: "go", votos: 0 },  
     {id: 5,title: "c#",votos: 0}
 ])
+
 //function para o escolhaVotos 
-function onvotado(id ) { 
+function onvotado(id) { 
+  if (numeroVotos === 0 ) return
   
+  setNumeroVotos(prev => prev - 1);
+
      const novaLista = listaDeVotacao.map(opcao => { 
             if (opcao.id === id) {
         return {...opcao, votos: opcao.votos + 1}
@@ -69,6 +74,9 @@ const handleCreateVote = (e) => {
 
   return (
     <div>
+      <div>
+        <h1> numero de votos: {numeroVotos}</h1>
+      </div>
       <CriarVotacoes valueInput={inputNewVote} onKeyDownInput={handleCreateVote}
       onChangeinput= {(e) => setInputNewVote(e.target.value)}/> 
       <EscolhaVotos listaDeVotacao={listaDeVotacao} onvotado={onvotado} />
