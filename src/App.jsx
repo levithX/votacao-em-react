@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import EscolhaVotos from './componente/EscolhaVotos'
-
+import CriarVotacoes from './componente/CriarVotacoes'
+// import { list } from 'postcss'
 
 function App() {
 const [ganhador, setGanhador] = useState(null)
+const [inputNewVote, setInputNewVote] = useState('') 
 const [falhaResultado,setFalhaResultado ] = useState(false)
 const [listaDeVotacao, setListaDeVotacao] = useState([ 
     {id: 1,  title: "javascript",votos: 0},
@@ -14,11 +16,11 @@ const [listaDeVotacao, setListaDeVotacao] = useState([
 ])
 //function para o escolhaVotos 
 function onvotado(id ) { 
+  
      const novaLista = listaDeVotacao.map(opcao => { 
             if (opcao.id === id) {
         return {...opcao, votos: opcao.votos + 1}
       }
-      console.log("nome:" + opcao.title + " numero de votos:" + opcao.votos)
       return opcao;
     })
     setListaDeVotacao(novaLista)
@@ -38,20 +40,40 @@ function mostraresultado() {
       venceu = opcao.title
     }
   })
-
   if(algumZerado) {
     setFalhaResultado(true)
   } else {
     setFalhaResultado(false)
   }
-
   setGanhador(venceu)
 }
+//criar votacao 
+const handleCreateVote = (e) => {
+  if (e.key === "Enter") {    
+    const texto =  inputNewVote.trim(); 
+    if (!texto) return;
+
+    const maiorId = Math.max(...listaDeVotacao.map(item => item.id), 0)
+    const novoVoto = { 
+      id: maiorId + 1, 
+      title: texto,
+      votos: 0
+    }
+    setListaDeVotacao([...listaDeVotacao, novoVoto]); 
+    setInputNewVote('');
+    }   
+  } 
+ 
+
+
+
   return (
     <div>
+      <CriarVotacoes valueInput={inputNewVote} onKeyDownInput={handleCreateVote}
+      onChangeinput= {(e) => setInputNewVote(e.target.value)}/> 
       <EscolhaVotos listaDeVotacao={listaDeVotacao} onvotado={onvotado} />
       <button onClick={mostraresultado}> monstra resultado</button>
-      {ganhador && !falhaResultado } <p>{ganhador}</p>
+      {ganhador && !falhaResultado}<p>{ganhador}</p>
     </div>
   )
 }

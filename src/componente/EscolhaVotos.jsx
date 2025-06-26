@@ -3,7 +3,7 @@ function EscolhaVotos({ listaDeVotacao, onvotado, votado }) {
     <div>
       {listaDeVotacao.map(opcao => (
             <div key={opcao.id}>
-          <button onClick={() => onvotado(opcao.id)} disabled={votado} >
+          <button onClick={() => onvotado(opcao.id)} >
             {opcao.title}
           </button>
           <p>{opcao.votos}</p>
