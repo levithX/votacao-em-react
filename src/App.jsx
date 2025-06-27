@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import EscolhaVotos from './componente/EscolhaVotos'
 import CriarVotacoes from './componente/CriarVotacoes'
-// import { list } from 'postcss'
 
 function App() {
 const [numeroVotos, setNumeroVotos] = useState(5)
@@ -31,26 +30,17 @@ function onvotado(id) {
     setListaDeVotacao(novaLista)
   }
 // function para o resultado 
-function mostraresultado() {
-  let comparacao = 1
-  let venceu = null
-  let algumZerado = false
-
-  listaDeVotacao.forEach(opcao => {
-    if(opcao.votos === 0) {
-      algumZerado = true
-    }
-    if(comparacao <= opcao.votos) {
-      comparacao = opcao.votos
-      venceu = opcao.title
-    }
-  })
-  if(algumZerado) {
-    setFalhaResultado(true)
-  } else {
-    setFalhaResultado(false)
+const mostraresultado = () =>  {
+  const limite = listaDeVotacao.length
+  const copiaLista = [...listaDeVotacao]
+  for (var index = 0; index < limite - 1; ++index) {
+     if (copiaLista[index].votos <copiaLista[index + 1].votos) { 
+        const primeiro = copiaLista[index] 
+        copiaLista[index] = copiaLista[index + 1] 
+        copiaLista[index + 1] = primeiro; 
+     } 
   }
-  setGanhador(venceu)
+  setListaDeVotacao(copiaLista)
 }
 //criar votacao 
 const handleCreateVote = (e) => {
@@ -68,7 +58,6 @@ const handleCreateVote = (e) => {
     setInputNewVote('');
     }   
   } 
- 
 
 
 
