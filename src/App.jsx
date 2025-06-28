@@ -6,7 +6,6 @@ function App() {
 const [numeroVotos, setNumeroVotos] = useState(5)
 const [ganhador, setGanhador] = useState(null)
 const [inputNewVote, setInputNewVote] = useState('') 
-const [falhaResultado,setFalhaResultado ] = useState(false)
 const [listaDeVotacao, setListaDeVotacao] = useState([ 
     {id: 1,  title: "javascript",votos: 0},
     {id: 2,title: "python",votos: 0},
@@ -18,7 +17,6 @@ const [listaDeVotacao, setListaDeVotacao] = useState([
 //function para o escolhaVotos 
 function onvotado(id) { 
   if (numeroVotos === 0 ) return
-  
   setNumeroVotos(prev => prev - 1);
 
      const novaLista = listaDeVotacao.map(opcao => { 
@@ -31,16 +29,10 @@ function onvotado(id) {
   }
 // function para o resultado 
 const mostraresultado = () =>  {
-  const limite = listaDeVotacao.length
   const copiaLista = [...listaDeVotacao]
-  for (var index = 0; index < limite - 1; ++index) {
-     if (copiaLista[index].votos <copiaLista[index + 1].votos) { 
-        const primeiro = copiaLista[index] 
-        copiaLista[index] = copiaLista[index + 1] 
-        copiaLista[index + 1] = primeiro; 
-     } 
-  }
+  copiaLista.sort((a, b ) => b.votos - a.votos); 
   setListaDeVotacao(copiaLista)
+  setGanhador(true)
 }
 //criar votacao 
 const handleCreateVote = (e) => {
@@ -70,9 +62,16 @@ const handleCreateVote = (e) => {
       onChangeinput= {(e) => setInputNewVote(e.target.value)}/> 
       <EscolhaVotos listaDeVotacao={listaDeVotacao} onvotado={onvotado} />
       <button onClick={mostraresultado}> monstra resultado</button>
-      {ganhador && !falhaResultado}<p>{ganhador}</p>
+      {ganhador === true &&
+        <div>
+        {listaDeVotacao.map( opcao => (
+          <div key={opcao.id}>
+            <p>{opcao.title}</p>
+          </div>
+        ))}
+           
+      </div>
+      }
     </div>
-  )
-}
-
+)}
 export default App
