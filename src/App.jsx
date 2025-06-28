@@ -17,6 +17,7 @@ const [listaDeVotacao, setListaDeVotacao] = useState([
 //function para o escolhaVotos 
 function onvotado(id) { 
   if (numeroVotos === 0 ) return
+  if (ganhador === true ) return 
   setNumeroVotos(prev => prev - 1);
 
      const novaLista = listaDeVotacao.map(opcao => { 
