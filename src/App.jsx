@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState } from 'react'; 
+import { useEffect} from 'react';
 import EscolhaVotos from './componente/EscolhaVotos'
 import CriarVotacoes from './componente/CriarVotacoes'
 
@@ -12,20 +13,31 @@ const [listaDeVotacao, setListaDeVotacao] = useState([
     {id: 3,title: "java",votos: 0},
     {id: 4, title: "go", votos: 0 },  
     {id: 5,title: "c#",votos: 0}
-])
+]) 
+const [ultimoVoto, setUltimoVoto] = useState('') 
+  
+useEffect(() => {
+    if (ultimoVoto) { 
+      const lista = JSON.parse(localStorage.getItem("listaDeVotacao")) || [];  
+  lista.push(ultimoVoto);
+  localStorage.setItem("listaDeVotados", JSON.stringify(lista))
+  }}, [ultimoVoto]); 
+
 
 //function para o escolhaVotos 
 function onvotado(id) { 
   if (numeroVotos === 0 ) return
   if (ganhador === true ) return 
   setNumeroVotos(prev => prev - 1);
-
+     let idVotado = null;
      const novaLista = listaDeVotacao.map(opcao => { 
             if (opcao.id === id) {
+        idVotado = opcao.id;
         return {...opcao, votos: opcao.votos + 1}
       }
       return opcao;
     })
+    setUltimoVoto(idVotado)
     setListaDeVotacao(novaLista)
   }
 // function para o resultado 
@@ -35,7 +47,7 @@ const mostraresultado = () =>  {
   setListaDeVotacao(copiaLista)
   setGanhador(true)
 }
-//criar votacao 
+//criar escolhar de votacao 
 const handleCreateVote = (e) => {
   if (e.key === "Enter") {    
     const texto =  inputNewVote.trim(); 
