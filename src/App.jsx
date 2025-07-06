@@ -4,6 +4,7 @@ import EscolhaVotos from "./componente/EscolhaVotos";
 import CriarVotacoes from "./componente/CriarVotacoes";
 
 function App() {
+  const [errorVazio /*igual a mim*/, SetErrorVazio] = useState(false);
   const [numeroVotos, setNumeroVotos] = useState(5);
   const [ganhador, setGanhador] = useState(null);
   const [inputNewVote, setInputNewVote] = useState("");
@@ -72,7 +73,10 @@ function App() {
   const handleCreateVote = (e) => {
     if (e.key === "Enter") {
       const texto = inputNewVote.trim();
-      if (!texto) return;
+      if (!texto) {
+        SetErrorVazio(true);
+        return;
+      }
 
       const maiorId = Math.max(...listaDeVotacao.map((item) => item.id), 0);
       const novoVoto = {
@@ -95,6 +99,7 @@ function App() {
         onKeyDownInput={handleCreateVote}
         onChangeinput={(e) => setInputNewVote(e.target.value)}
       />
+      {errorVazio && <p> Error: escreva algo</p>}
       <EscolhaVotos
         listaDeVotacao={listaDeVotacao}
         onvotado={onvotado}
